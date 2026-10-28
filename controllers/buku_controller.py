@@ -8,7 +8,7 @@ class BukuController:
         self.model = BukuModel()
         self.view = BukuView()
 
-        # Binding tombol dan event klik baris tabel
+        # Binding tombol dan klik baris tabel
         self.view.btn_simpan.configure(command=self.simpan_data)
         self.view.btn_perbarui.configure(command=self.perbarui_data)
         self.view.btn_hapus.configure(command=self.hapus_data)
@@ -19,9 +19,11 @@ class BukuController:
     def muat_data_tabel(self):
         for item in self.view.tabel.get_children():
             self.view.tabel.delete(item)
-        for buku in self.model.get_all_buku():
-            self.view.tabel.insert("", "end", values=(
-                buku['id_buku'], buku['judul'], buku['penulis'], buku['tahun_terbit']))
+        for no, buku in enumerate(self.model.get_all_buku(), start=1):
+            # iid menyimpan id_buku asli, kolom pertama hanya nomor urut
+            self.view.tabel.insert("", "end", iid=str(buku['id_buku']),
+                                   values=(no, buku['judul'], buku['penulis'],
+                                           buku['tahun_terbit']))
 
     def bersihkan_form(self):
         self.view.entry_judul.delete(0, 'end')
@@ -32,7 +34,7 @@ class BukuController:
         terpilih = self.view.tabel.selection()
         if not terpilih:
             return None
-        return self.view.tabel.item(terpilih[0])["values"][0]
+        return int(terpilih[0])   # id_buku asli dari iid
 
     def pilih_baris(self, event=None):
         terpilih = self.view.tabel.selection()
@@ -68,6 +70,7 @@ class BukuController:
         if id_buku is None:
             messagebox.showwarning("Peringatan", "Pilih data di tabel terlebih dahulu!")
             return
+
         judul = self.view.entry_judul.get()
         penulis = self.view.entry_penulis.get()
         tahun = self.view.entry_tahun.get()
@@ -99,7 +102,8 @@ class BukuController:
             self.bersihkan_form()
             self.muat_data_tabel()
         else:
-            messagebox.showerror("Error", "Gagal menghapus. Data mungkin dipakai di tabel peminjaman.")
+            messagebox.showerror(
+                "Error", "Gagal menghapus. Data mungkin dipakai di tabel peminjaman.")
 
     def run(self):
         self.view.mainloop()

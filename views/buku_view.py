@@ -28,6 +28,8 @@ class BukuView(ctk.CTk):
         self.entry_tahun = ctk.CTkEntry(frame_kiri, width=260)
         self.entry_tahun.pack(padx=20, pady=(0, 15))
 
+
+        # Tombol simpan, perbarui, dan hapus
         self.btn_simpan = ctk.CTkButton(frame_kiri, text="Simpan Data")
         self.btn_simpan.pack(padx=20, pady=4, fill="x")
 
@@ -44,16 +46,18 @@ class BukuView(ctk.CTk):
 
         ctk.CTkLabel(frame_kanan, text="Daftar Buku",
                      font=("Arial", 18, "bold")).pack(pady=(15, 5))
+        style = ttk.Style()
+        style.configure("Treeview", rowheight=28)
 
         self.tabel = ttk.Treeview(frame_kanan, show="headings",
-                                  columns=("id", "judul", "penulis", "tahun"))
-
-        self.tabel.heading("id", text="ID")
+                          columns=("no", "judul", "penulis", "tahun"))
+        
+        self.tabel.heading("no", text="No")
         self.tabel.heading("judul", text="Judul")
         self.tabel.heading("penulis", text="Penulis")
         self.tabel.heading("tahun", text="Tahun Terbit")
-
-        self.tabel.column("id", width=50, anchor="center")
+        
+        self.tabel.column("no", width=50, anchor="center")
         self.tabel.column("judul", width=260)
         self.tabel.column("penulis", width=180)
         self.tabel.column("tahun", width=100, anchor="center")

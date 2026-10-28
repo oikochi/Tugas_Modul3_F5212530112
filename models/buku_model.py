@@ -21,7 +21,7 @@ class BukuModel:
 
     def get_all_buku(self):
         cursor = self.conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM buku")
+        cursor.execute("SELECT * FROM buku ORDER BY id_buku")
         return cursor.fetchall()
 
     def update_buku(self, id_buku, judul, penulis, tahun):
